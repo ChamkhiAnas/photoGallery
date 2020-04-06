@@ -14,6 +14,8 @@ export class PhotoService {
 
   constructor() { }
 
+ private async savePicture(cameraPhoto: CameraPhoto) { }
+
 
 public async addNewToGallery() {
   // Take a photo
@@ -28,6 +30,11 @@ public async addNewToGallery() {
     quality: 100 
   });
 
+    // Save the picture and add it to photo collection
+    const savedImageFile:any = await this.savePicture(capturedPhoto);
+    this.photos.unshift(savedImageFile);
+  
+
   this.photos.unshift({
     filepath: "sn...",
     webviewPath: capturedPhoto.webPath
@@ -35,10 +42,25 @@ public async addNewToGallery() {
 
 }
 
-private async savePicture(cameraPhoto: CameraPhoto) { }
+private async savePicture(cameraPhoto: CameraPhoto) {
+  // Convert photo to base64 format, required by Filesystem API to save
+  const base64Data = await this.readAsBase64(cameraPhoto);
+
+  // Write the file to the data directory
+  const fileName = new Date().getTime() + '.jpeg';
+  await Filesystem.writeFile({
+    path: fileName,
+    data: base64Data,
+    directory: FilesystemDirectory.Data
+  });
+
+  // Get platform-specific photo filepaths
+  return await this.getPhotoFile(cameraPhoto, fileName);
+}
 
 
 }
+
 
 
 
