@@ -35,7 +35,13 @@ public async addNewToGallery() {
 
 }
 
+private async savePicture(cameraPhoto: CameraPhoto) { }
+
+
 }
+
+
+
 
 interface Photo {
   filepath: string;
