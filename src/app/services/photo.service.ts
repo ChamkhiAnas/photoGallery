@@ -29,10 +29,10 @@ public async addNewToGallery() {
   });
 
   this.photos.unshift({
-    filepath: "soon...",
+    filepath: "sn...",
     webviewPath: capturedPhoto.webPath
   });
-  
+
 }
 
 }
