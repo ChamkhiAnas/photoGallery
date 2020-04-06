@@ -19,19 +19,19 @@
           <ion-icon name="camera"></ion-icon>
         </ion-fab-button>
       </ion-fab>
+    
+      <ion-grid>
+        <ion-row>
+        <ion-col size="6" 
+          *ngFor="let photo of photoService.photos; index as position">
+            <ion-img src="{{ photo.webviewPath }}"></ion-img>
+        </ion-col>
+        </ion-row>
+      </ion-grid>
+    
+    
 
   <app-explore-container name="Get A Picture"></app-explore-container>
 </ion-content>
 
-<ion-content>
-  <ion-grid>
-    <ion-row>
-    <ion-col size="6" 
-      *ngFor="let photo of photoService.photos; index as position">
-        <ion-img src="{{ photo.webviewPath }}"></ion-img>
-    </ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <!-- ion-fab markup  -->
-</ion-content>
+ 
