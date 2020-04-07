@@ -13,6 +13,8 @@ export class PhotoService {
   // other code
 
     private PHOTO_STORAGE: string = "photos";
+    // Display the photo by reading into base64 format
+
  
 
   constructor() { }
@@ -93,17 +95,29 @@ public async addNewToGallery() {
             return photoCopy;
             }))
   });
+  for (let photo of this.photos) {
+    // Read each saved photo's data from the Filesystem
+    const readFile = await Filesystem.readFile({
+        path: photo.filepath,
+        directory: FilesystemDirectory.Data
+    });
+  
+    // Web platform only: Save the photo into the base64 field
+    photo.base64 = `data:image/jpeg;base64,${readFile.data}`;
+  }
   
 
 }
 
-  public async loadSaved() {
+public async loadSaved() {
   // Retrieve cached photo array data
   const photos = await Storage.get({ key: this.PHOTO_STORAGE });
   this.photos = JSON.parse(photos.value) || [];
 
   // more to come...
 }
+
+
 
 }
 
