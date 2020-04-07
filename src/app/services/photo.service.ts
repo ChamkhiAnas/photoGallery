@@ -106,11 +106,29 @@ export class PhotoService {
     reader.readAsDataURL(blob);
   });
 
-  private async getPhotoFile(cameraPhoto: CameraPhoto, fileName: string): Promise<Photo> {
-    return {
-      filepath: fileName,
-      webviewPath: cameraPhoto.webPath
-    };
+  private async getPhotoFile(cameraPhoto, fileName) {
+    if (this.platform.is('hybrid')) {
+      // Get the new, complete filepath of the photo saved on filesystem
+      const fileUri = await Filesystem.getUri({
+        directory: FilesystemDirectory.Data,
+        path: fileName
+      });
+  
+      // Display the new image by rewriting the 'file://' path to HTTP
+      // Details: https://ionicframework.com/docs/core-concepts/webview#file-protocol
+      return {
+        filepath: fileUri.uri,
+        webviewPath: Capacitor.convertFileSrc(fileUri.uri),
+      };
+    }
+    else {
+      // Use webPath to display the new image instead of base64 since it's
+      // already loaded into memory
+      return {
+        filepath: fileName,
+        webviewPath: cameraPhoto.webPath
+      };
+    }
   }
 
 }
