@@ -88,10 +88,10 @@ public async addNewToGallery() {
     this.photos.unshift(savedImageFile);
   
 
-  this.photos.unshift({
-    filepath: "sn...",
-    webviewPath: capturedPhoto.webPath
-  });
+  // this.photos.unshift({
+  //   filepath: "sn...",
+  //   webviewPath: capturedPhoto.webPath
+  // });
 
   Storage.set({
     key: this.PHOTO_STORAGE,
