@@ -18,6 +18,15 @@ export class PhotoService {
  
 
   constructor() { }
+  
+  public async loadSaved() {
+    // Retrieve cached photo array data
+    const photos = await Storage.get({ key: this.PHOTO_STORAGE });
+    this.photos = JSON.parse(photos.value) || [];
+  
+    // more to come...
+  }
+  
 
   private async readAsBase64(cameraPhoto: CameraPhoto) {
     // Fetch the photo, read as a blob, then convert to base64 format
@@ -95,6 +104,7 @@ public async addNewToGallery() {
             return photoCopy;
             }))
   });
+  
   for (let photo of this.photos) {
     // Read each saved photo's data from the Filesystem
     const readFile = await Filesystem.readFile({
@@ -109,13 +119,6 @@ public async addNewToGallery() {
 
 }
 
-public async loadSaved() {
-  // Retrieve cached photo array data
-  const photos = await Storage.get({ key: this.PHOTO_STORAGE });
-  this.photos = JSON.parse(photos.value) || [];
-
-  // more to come...
-}
 
 
 
