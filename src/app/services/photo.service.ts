@@ -34,31 +34,40 @@ export class PhotoService {
     });
 
     const savedImageFile = await this.savePicture(capturedPhoto);
-
-    this.photos.unshift(savedImageFile);
     Storage.set({
       key: this.PHOTO_STORAGE,
-      value: JSON.stringify(this.photos.map(p => {
-        const photoCopy = { ...p };
-        delete photoCopy.base64;
-        return photoCopy;
-      }))
-    });
+      value: this.platform.is('hybrid')
+              ? JSON.stringify(this.photos)
+              : JSON.stringify(this.photos.map(p => {
+                // Don't save the base64 representation of the photo data,
+                // since it's already saved on the Filesystem
+                const photoCopy = { ...p };
+                delete photoCopy.base64;
+    
+                return photoCopy;
+            }))
+
   }
 
   public async loadSaved() {
+    // Retrieve cached photo array data
     const photos = await Storage.get({ key: this.PHOTO_STORAGE });
     this.photos = JSON.parse(photos.value) || [];
-
-    for (let photo of this.photos) {
-      // Read each saved photo's data from the Filesystem
-      const readFile = await Filesystem.readFile({
-        path: photo.filepath,
-        directory: FilesystemDirectory.Data
-      });
-
-      // Web platform only: Save the photo into the base64 field
-      photo.base64 = `data:image/jpeg;base64,${readFile.data}`;
+  
+    // Easiest way to detect when running on the web:
+    // “when the platform is NOT hybrid, do this”
+    if (!this.platform.is('hybrid')) {
+      // Display the photo by reading into base64 format
+      for (let photo of this.photos) {
+        // Read each saved photo's data from the Filesystem
+        const readFile = await Filesystem.readFile({
+            path: photo.filepath,
+            directory: FilesystemDirectory.Data
+        });
+  
+        // Web platform only: Save the photo into the base64 field
+        photo.base64 = `data:image/jpeg;base64,${readFile.data}`;
+      }
     }
   }
 
