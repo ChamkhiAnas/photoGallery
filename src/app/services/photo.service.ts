@@ -16,9 +16,14 @@ export class PhotoService {
   public photos: Photo[] = [];
 
   private PHOTO_STORAGE: string = "photos";
+  private platform: Platform;
 
-  constructor() {
+
+  
+  constructor(platform: Platform) {
+    this.platform = platform;
   }
+
 
   public async addNewToGallery() {
     // Take a photo
