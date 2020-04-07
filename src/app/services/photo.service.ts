@@ -4,6 +4,8 @@ import {
   Plugins, CameraResultType, Capacitor, FilesystemDirectory,
   CameraPhoto, CameraSource
 } from '@capacitor/core';
+import { Platform } from '@ionic/angular';
+
 
 const { Camera, Filesystem, Storage } = Plugins;
 
