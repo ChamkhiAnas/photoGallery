@@ -12,6 +12,9 @@ export class PhotoService {
 
   // other code
 
+    private PHOTO_STORAGE: string = "photos";
+ 
+
   constructor() { }
 
   private async readAsBase64(cameraPhoto: CameraPhoto) {
