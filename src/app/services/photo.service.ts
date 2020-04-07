@@ -82,9 +82,28 @@ public async addNewToGallery() {
     webviewPath: capturedPhoto.webPath
   });
 
+  Storage.set({
+    key: this.PHOTO_STORAGE,
+    value: JSON.stringify(this.photos.map(p => {
+            // Don't save the base64 representation of the photo data, 
+            // since it's already saved on the Filesystem
+            const photoCopy = { ...p };
+            delete photoCopy.base64;
+  
+            return photoCopy;
+            }))
+  });
+  
+
 }
 
+  public async loadSaved() {
+  // Retrieve cached photo array data
+  const photos = await Storage.get({ key: this.PHOTO_STORAGE });
+  this.photos = JSON.parse(photos.value) || [];
 
+  // more to come...
+}
 
 }
 
